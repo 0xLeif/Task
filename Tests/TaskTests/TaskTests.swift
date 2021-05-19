@@ -34,21 +34,21 @@ final class TaskTests: XCTestCase {
         Task
             .do(withDelay: 5) {
                 "Hello World!"
-        }
-        .sink {
-            [
-                .completion {
-                    sema.signal()
-                },
-                .success { value in
-                    XCTAssertEqual(value, "Hello World!")
-                },
-                .failure { _ in
-                    XCTAssert(false)
-                }
-            ]
-        }
-        .store(in: &bag)
+            }
+            .sink(
+                [
+                    .completion {
+                        sema.signal()
+                    },
+                    .success { value in
+                        XCTAssertEqual(value, "Hello World!")
+                    },
+                    .failure { _ in
+                        XCTAssert(false)
+                    }
+                ]
+            )
+            .store(in: &bag)
         
         
         sema.wait()
@@ -60,21 +60,21 @@ final class TaskTests: XCTestCase {
         Task
             .do(withDelay: 5) {
                 throw NSError(domain: "Task", code: -1, userInfo: nil)
-        }
-        .sink {
-            [
-                .failure { _ in
-                    XCTAssert(true)
-                },
-                .completion {
-                    sema.signal()
-                },
-                .success {
-                    XCTAssert(false)
-                }
-            ]
-        }
-        .store(in: &bag)
+            }
+            .sink(
+                [
+                    .failure { _ in
+                        XCTAssert(true)
+                    },
+                    .completion {
+                        sema.signal()
+                    },
+                    .success {
+                        XCTAssert(false)
+                    }
+                ]
+            )
+            .store(in: &bag)
         
         sema.wait()
     }
@@ -83,8 +83,10 @@ final class TaskTests: XCTestCase {
         let sema = DispatchSemaphore(value: 0)
         
         Task
-            .fetch(url: URL(string: "https://avatars0.githubusercontent.com/u/8268288?s=460&u=2cb09673ea7f5230fa929b9b14a438cb2a65751c&v=4")!)
-            .sink {
+            .fetch(
+                url: URL(string: "https://avatars0.githubusercontent.com/u/8268288?s=460&u=2cb09673ea7f5230fa929b9b14a438cb2a65751c&v=4")!
+            )
+            .sink(
                 [
                     .failure { _ in
                         XCTAssert(false)
@@ -96,8 +98,8 @@ final class TaskTests: XCTestCase {
                         XCTAssert(true)
                     }
                 ]
-        }
-        .store(in: &bag)
+            )
+            .store(in: &bag)
         
         sema.wait()
     }
@@ -108,22 +110,22 @@ final class TaskTests: XCTestCase {
         Task
             .post(url: URL(string: "https://postman-echo.com/post")!) {
                 "Some Data".data(using: .utf8)!
-        }
+            }
             
-        .sink {
-            [
-                .failure { _ in
-                    XCTAssert(false)
-                },
-                .completion {
-                    sema.signal()
-                },
-                .success { _ in
-                    XCTAssert(true)
-                }
-            ]
-        }
-        .store(in: &bag)
+            .sink(
+                [
+                    .failure { _ in
+                        XCTAssert(false)
+                    },
+                    .completion {
+                        sema.signal()
+                    },
+                    .success { _ in
+                        XCTAssert(true)
+                    }
+                ]
+            )
+            .store(in: &bag)
         
         sema.wait()
     }
@@ -133,7 +135,7 @@ final class TaskTests: XCTestCase {
         
         Task
             .post(url: URL(string: "https://github/0xLeif/Later")!)
-            .sink {
+            .sink(
                 [
                     .failure { _ in
                         XCTAssert(true)
@@ -145,8 +147,8 @@ final class TaskTests: XCTestCase {
                         XCTAssert(false)
                     }
                 ]
-        }
-        .store(in: &bag)
+            )
+            .store(in: &bag)
         
         sema.wait()
     }
