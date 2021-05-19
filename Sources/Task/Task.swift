@@ -4,7 +4,7 @@ import Combine
 public class Task {
     @discardableResult
     public static func promise<T>(
-        wgork: @escaping (@escaping Future<T, Error>.Promise) -> Void
+        work: @escaping (@escaping Future<T, Error>.Promise) -> Void
     ) -> Future<T, Error> {
         Future { promise in
             DispatchQueue.global().async {
