@@ -17,7 +17,7 @@ final class TaskTests: XCTestCase {
         var isLooping = true
         
         Task
-            .do(withDelay: 5)
+            .do(withDelay: 3)
             .sink(.success { isLooping = false })
             .store(in: &bag)
         
@@ -32,7 +32,7 @@ final class TaskTests: XCTestCase {
         let sema = DispatchSemaphore(value: 0)
         
         Task
-            .do(withDelay: 5) {
+            .do(withDelay: 3) {
                 "Hello World!"
             }
             .sink(
@@ -58,7 +58,7 @@ final class TaskTests: XCTestCase {
         let sema = DispatchSemaphore(value: 0)
         
         Task
-            .do(withDelay: 5) {
+            .do(withDelay: 3) {
                 throw NSError(domain: "Task", code: -1, userInfo: nil)
             }
             .sink(
@@ -111,7 +111,6 @@ final class TaskTests: XCTestCase {
             .post(url: URL(string: "https://postman-echo.com/post")!) {
                 "Some Data".data(using: .utf8)!
             }
-            
             .sink(
                 [
                     .failure { _ in
