@@ -8,21 +8,26 @@ public struct TaskPostError: Error {
 }
 
 public extension Task {
-    static func post(request: URLRequest) -> Future<(Data?, URLResponse?), Error> {
+    static func post(
+        request: URLRequest
+    ) -> Future<(Data?, URLResponse?), Error> {
         Task.promise { promise in
             URLSession.shared
                 .dataTask(with: request) { (data, response, error) in
                     if let error = error {
                         promise(.failure(TaskPostError(error: error,
-                                                          response: response)))
+                                                       response: response)))
                     }
                     promise(.success((data, response)))
-            }
-            .resume()
+                }
+                .resume()
         }
     }
     
-    static func post(url: URL, withData data: (() -> Data)? = nil) -> Future<(Data?, URLResponse?), Error> {
+    static func post(
+        url: URL,
+        withData data: (() -> Data)? = nil
+    ) -> Future<(Data?, URLResponse?), Error> {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = data?()
@@ -37,7 +42,9 @@ public extension Task {
 // MARK: Fetch
 public extension Task {
     @discardableResult
-    static func fetch(url: URL) -> Future<(Data?, URLResponse?), Error> {
+    static func fetch(
+        url: URL
+    ) -> Future<(Data?, URLResponse?), Error> {
         Task.promise { promise in
             URLSession.shared
                 .dataTask(with: url) { (data, response, error) in
@@ -45,13 +52,15 @@ public extension Task {
                         promise(.failure(error))
                     }
                     promise(.success((data, response)))
-            }
-            .resume()
+                }
+                .resume()
         }
     }
     
     @discardableResult
-    static func fetch(url: URLRequest) -> Future<(Data?, URLResponse?), Error> {
+    static func fetch(
+        url: URLRequest
+    ) -> Future<(Data?, URLResponse?), Error> {
         Task.promise { promise in
             URLSession.shared
                 .dataTask(with: url) { (data, response, error) in
@@ -59,8 +68,8 @@ public extension Task {
                         promise(.failure(error))
                     }
                     promise(.success((data, response)))
-            }
-            .resume()
+                }
+                .resume()
         }
     }
 }
