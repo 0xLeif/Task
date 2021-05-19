@@ -2,6 +2,7 @@ import Foundation
 import Combine
 
 // MARK: Post
+
 public struct TaskPostError: Error {
     let error: Error
     let response: URLResponse?
@@ -40,6 +41,7 @@ public extension Task {
 }
 
 // MARK: Fetch
+
 public extension Task {
     @discardableResult
     static func fetch(
