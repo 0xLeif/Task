@@ -40,6 +40,21 @@ public enum Task {
     }
     
     @discardableResult
+    public static func `do`<T>(
+        withDelay delay: UInt32 = 0,
+        work: @escaping () throws -> T?
+    ) -> Future<T?, Error> {
+        Task.promise { promise in
+            sleep(delay)
+            do {
+                promise(.success(try work()))
+            } catch {
+                promise(.failure(error))
+            }
+        }
+    }
+    
+    @discardableResult
     public static func `do`(
         withDelay delay: UInt32 = 0,
         work: @escaping () throws -> Void = {}
@@ -59,6 +74,23 @@ public enum Task {
         withDelay delay: UInt32 = 0,
         work: @escaping () throws -> T
     ) -> Future<T, Error> {
+        Task.promise { promise in
+            sleep(delay)
+            DispatchQueue.main.async {
+                do {
+                    promise(.success(try work()))
+                } catch {
+                    promise(.failure(error))
+                }
+            }
+        }
+    }
+    
+    @discardableResult
+    public static func main<T>(
+        withDelay delay: UInt32 = 0,
+        work: @escaping () throws -> T?
+    ) -> Future<T?, Error> {
         Task.promise { promise in
             sleep(delay)
             DispatchQueue.main.async {
