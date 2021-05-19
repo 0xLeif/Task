@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-public class Task {
+public enum Task {
     @discardableResult
     public static func promise<T>(
         work: @escaping (@escaping Future<T, Error>.Promise) -> Void
