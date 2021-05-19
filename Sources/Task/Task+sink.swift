@@ -27,10 +27,10 @@ public extension Publisher {
         }
     }
     
-    func sink(_ closure: () -> [SinkEvent<Output>]) -> AnyCancellable {
-        let events = closure()
-        
-        return sink(receiveCompletion: { completion in
+    func sink(
+        _ events: [SinkEvent<Output>]
+    ) -> AnyCancellable {
+        sink(receiveCompletion: { completion in
             if case .failure(let error) = completion {
                 events.forEach { event in
                     if case .failure(let closure) = event {
@@ -50,6 +50,21 @@ public extension Publisher {
                 }
             }
         }
+    }
+    
+    func sink(
+        success: @escaping (Output) -> Void,
+        failure: ((Error) -> Void)? = nil,
+        completion: (() -> Void)? = nil
+    ) -> AnyCancellable {
+        sink(
+            [
+                .success(success),
+                failure.map { .failure($0) },
+                completion.map { .completion($0) }
+            ]
+            .compactMap { $0 }
+        )
     }
 }
 
