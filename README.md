@@ -2,27 +2,53 @@
 
 ### promise
 ```swift
-promise<T>(work: @escaping (@escaping Future<T, Error>.Promise) -> Void) -> Future<T, Error>
+promise<T>(
+  work: @escaping (@escaping Future<T, Error>.Promise) -> Void
+) -> Future<T, Error>
 
-promise(work: @escaping (@escaping Future<Void, Error>.Promise) -> Void) -> Future<Void, Error>
+promise<T>(
+  work: @escaping (@escaping Future<T?, Error>.Promise) -> Void
+) -> Future<T?, Error>
+
+promise(
+  work: @escaping (@escaping Future<Void, Error>.Promise) -> Void
+) -> Future<Void, Error>
 ```
 
 ### do
 ```swift
-do<T>(withDelay delay: UInt32 = 0,
-                               work: @escaping () throws -> T) -> Future<T, Error>
+do<T>(
+  withDelay delay: UInt32 = 0,
+  work: @escaping () throws -> T
+) -> Future<T, Error>
+                               
+do<T>(
+  withDelay delay: UInt32 = 0,
+  work: @escaping () throws -> T?
+) -> Future<T?, Error>
 
-do(withDelay delay: UInt32 = 0,
-                            work: @escaping () throws -> Void = {}) -> Future<Void, Error>
+do(
+  withDelay delay: UInt32 = 0,
+  work: @escaping () throws -> Void = {}
+) -> Future<Void, Error>
 ```
 
 ### main
 ```swift
-main<T>(withDelay delay: UInt32 = 0,
-                               work: @escaping () throws -> T) -> Future<T, Error>
+main<T>(
+  withDelay delay: UInt32 = 0,
+  work: @escaping () throws -> T
+) -> Future<T, Error>
 
-main(withDelay delay: UInt32 = 0,
-                            work: @escaping () throws -> Void = {}) -> Future<Void, Error>
+main<T>(
+  withDelay delay: UInt32 = 0,
+  work: @escaping () throws -> T?
+) -> Future<T?, Error>
+
+main(
+  withDelay delay: UInt32 = 0,
+  work: @escaping () throws -> Void = {}
+) -> Future<Void, Error>
 ```
 
 ### fetch
