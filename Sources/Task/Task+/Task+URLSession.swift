@@ -43,7 +43,6 @@ public extension Task {
 // MARK: Fetch
 
 public extension Task {
-    @discardableResult
     static func fetch(
         url: URL
     ) -> Future<(Data?, URLResponse?), Error> {
@@ -59,7 +58,6 @@ public extension Task {
         }
     }
     
-    @discardableResult
     static func fetch(
         url: URLRequest
     ) -> Future<(Data?, URLResponse?), Error> {

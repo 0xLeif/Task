@@ -2,7 +2,6 @@ import Foundation
 import Combine
 
 public enum Task {
-    @discardableResult
     public static func promise<T>(
         work: @escaping (@escaping Future<T, Error>.Promise) -> Void
     ) -> Future<T, Error> {
@@ -13,7 +12,16 @@ public enum Task {
         }
     }
     
-    @discardableResult
+    public static func promise<T>(
+        work: @escaping (@escaping Future<T?, Error>.Promise) -> Void
+    ) -> Future<T?, Error> {
+        Future { promise in
+            DispatchQueue.global().async {
+                work(promise)
+            }
+        }
+    }
+    
     public static func promise(
         work: @escaping (@escaping Future<Void, Error>.Promise) -> Void
     ) -> Future<Void, Error> {
@@ -24,7 +32,6 @@ public enum Task {
         }
     }
     
-    @discardableResult
     public static func `do`<T>(
         withDelay delay: UInt32 = 0,
         work: @escaping () throws -> T
@@ -39,7 +46,6 @@ public enum Task {
         }
     }
     
-    @discardableResult
     public static func `do`<T>(
         withDelay delay: UInt32 = 0,
         work: @escaping () throws -> T?
@@ -54,7 +60,6 @@ public enum Task {
         }
     }
     
-    @discardableResult
     public static func `do`(
         withDelay delay: UInt32 = 0,
         work: @escaping () throws -> Void = {}
@@ -69,7 +74,6 @@ public enum Task {
         }
     }
     
-    @discardableResult
     public static func main<T>(
         withDelay delay: UInt32 = 0,
         work: @escaping () throws -> T
@@ -86,7 +90,6 @@ public enum Task {
         }
     }
     
-    @discardableResult
     public static func main<T>(
         withDelay delay: UInt32 = 0,
         work: @escaping () throws -> T?
@@ -103,7 +106,6 @@ public enum Task {
         }
     }
     
-    @discardableResult
     public static func main(
         withDelay delay: UInt32 = 0,
         work: @escaping () throws -> Void
